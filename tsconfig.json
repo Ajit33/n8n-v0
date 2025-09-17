@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Environment Settings
+    "target": "ES2020",              // safe for modern Node.js
+    "module": "NodeNext",            // use Node's ESM resolution
+    "moduleResolution": "NodeNext",  // important for ESM in Node
+    "types": ["node"],               // include Node.js types
+    "lib": ["ES2020"],
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Recommended Options
+    "strict": true,
+    "skipLibCheck": true,
+
+    // For React projects only
+    // "jsx": "react-jsx",
+
+    // Module behavior (keep this ON for proper ESM)
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
