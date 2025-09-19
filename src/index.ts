@@ -8,11 +8,29 @@ dotenv.config();
 function calculateSum(a:number, b:number) {
     return `Sum is ${a + b}`;
 }
-
+function multiply(a:number,b:number){
+  return `multiply is ${a * b}`
+}
 const ai = new GoogleGenAI({
   apiKey: process.env.API_KEY as string,
 });
-
+//Function Decclaration for Multiply
+const mutiplyFunctionCall: FunctionDeclaration={
+  name:'multiply',
+  description:'This tool is used to find the multiply of two numbers',
+  parametersJsonSchema:{
+    type:'object',
+    properties:{
+      a:{
+        type:'number'
+      },
+      b:{
+        type:'number'
+      }
+    },
+    require:['a' ,'b']
+  }
+}
 // Function declaration (schema)
 const sumFunctionCall: FunctionDeclaration = {
    name: 'sum',
@@ -33,9 +51,9 @@ const sumFunctionCall: FunctionDeclaration = {
 
   const response = await ai.models.generateContent({
     model: "gemini-2.0-flash",
-    contents: "What is the sum of 2 and 3?",
+    contents: "What is the sum of 2 and 3 and mutiply of 3 and 6 ?",
     config: {
-      tools: [{ functionDeclarations: [sumFunctionCall] }],
+      tools: [{ functionDeclarations: [sumFunctionCall]},{functionDeclarations:[mutiplyFunctionCall]}],
     },
   });
 
@@ -59,6 +77,8 @@ const sumFunctionCall: FunctionDeclaration = {
 	    switch (call.name) {
 	         case 'sum':
               functionResult = calculateSum(call?.args?.a as number, call?.args?.b as number);
+           case 'mutiply':
+              functionResult=multiply(call?.args?.a as number, call?.args?.b as number)
               break;
           default:
               functionResult = 'Unknown function';
@@ -75,7 +95,7 @@ const sumFunctionCall: FunctionDeclaration = {
 	const finalResult = await ai.models.generateContent({
 		model: 'gemini-2.0-flash',
     contents: [
-      { text: 'Whats the sum of 2 and 3' },
+      { text: 'What is the sum of 2 and 3 and mutiply of 3 and 6 ?' },
       { text: response.candidates?.[0]?.content?.toString() ?? '' },
       ...functionResponses.map(fr => ({ text: JSON.stringify(fr) }))
     ],
